@@ -6,11 +6,11 @@ const PlayerSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    playerName: {
+    firstName: {
         type: String,
         required: true,
     },
-    playerId: {
+    lastName: {
         type: String,
         required: true
     },
