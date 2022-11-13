@@ -3,7 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
-const dbPassword = '../db.env.DB_PASSWORD';
+const cors = require('cors');
 
 
 
@@ -13,34 +13,46 @@ const RoundsModel = require('./models/PLAYERS').Rounds;
 
 // receive data from client in json format
 app.use(express.json());
+app.use(cors());
 
 mongoose.connect(`mongodb+srv://rbps-admin:${process.env.DB_PASSWORD}@player-info.ydi2mm8.mongodb.net/rbpsPlayers?retryWrites=true&w=majority`, {
     useNewUrlParser: true
 });
 
-// rounds aren't being added to the player's roundsPlayed array
-app.get('/api/newplayer', async (req, res) => {
-    const player = new PlayerModel({
-        id: 6,
-        firstName: 'ed',
-        lastName: 'cracknell',
-        roundsPlayed: [],
-    })
+// // rounds aren't being added to the player's roundsPlayed array
+// app.get('/api/newplayer', async (req, res) => {
+//     const player = new PlayerModel({
+//         id: 6,
+//         firstName: 'ed',
+//         lastName: 'cracknell',
+//         roundsPlayed: [],
+//     })
 
-    try {
-        await player.save();
-        res.json(player);
-    } catch (err) {
-        res.status(500).send(err);
-    }});
+//     try {
+//         await player.save();
+//         res.json(player);
+//     } catch (err) {
+//         res.status(500).send(err);
+//     }});
+
+// see all players
+// app.get('/api/players/', async (req, res) => {
+//     try {
+//         const players = await PlayerModel.find();
+//         res.json(players);
+//     } catch (err) {
+//         res.status(500).send(err);
+//     }
+// });
 
 app.get('/api/players/', async (req, res) => {
-    try {
-        const players = await PlayerModel.find();
-        res.json(players);
-    } catch (err) {
-        res.status(500).send(err);
-    }
+    PlayerModel.find({}, (err, result) => {
+        if (err) {
+            res.send(err);
+        } else {
+            res.json(result);
+        }
+    });
 });
 
 app.get('/api/players/:id', async (req, res) => {
@@ -77,12 +89,13 @@ app.get('/api/players/:id/:score', async (req, res) => {
 
 
 // create new player
-app.post('/api/players', (req, res) => {
+app.post('/api/newplayer', (req, res) => {
     const player = new PlayerModel({
-        playerName: req.body.playerName,
-        playerId: req.body.playerId,
-        roundsPlayed: req.body.roundsPlayed
+        id: Date.now(),
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
     });
+    console.log('hello');
     player.save().then((newPlayer) => {
         console.log('new player created');
         res.send(newPlayer);
