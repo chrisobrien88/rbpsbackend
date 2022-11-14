@@ -1,8 +1,9 @@
 import './App.css';
 import Axios from 'axios';
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import AddNewPlayer from './components/AddNewPlayer';
+import PlayersDisplay from './components/PlayersDisplay';
 
 function App() {
 
@@ -10,7 +11,7 @@ function App() {
   const [player, setPlayer] = useState('');
   const [playerRounds, setPlayerRounds] = useState([]);
   const [playerRoundsCount, setPlayerRoundsCount] = useState([]);
-  const [score, setScore] = useState(0);
+  const [score, setScore] = useState();
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -21,21 +22,15 @@ function App() {
     Axios.get('http://localhost:5000/api/players').then((response) => {
         setPlayers(response.data);
       });
-  }, [players]);
-
-
+  }, []);
 
   const addNewScore = async (id) => {
     if(score === 0){
-      throw new Error('Please enter a score');
+      throw new Error('Please enter a valid score');
     }
-
     const newScore = await Axios.get(`http://localhost:5000/api/players/${id}/${score}`);
-    console.log('new data', newScore.data.roundsPlayed, player);
     setPlayerRounds(newScore.data.roundsPlayed);
- 
   }
-
 
   useEffect(() => {
     if (player) {
@@ -44,8 +39,7 @@ function App() {
     }
   }, [player, playerRoundsCount]);
 
-
-  const toggleDisplay = () => {
+  const toggleDisplayPlayers = () => {
     setDisplay(!display);
   };
 
@@ -61,38 +55,26 @@ function App() {
     })
   }
 
- 
-
-
   return (
     <div className="App">
-      <button onClick={toggleDisplay}>{display? "Hide Players" : "Show All Players"}</button>
+      <button onClick={toggleDisplayPlayers}>{display? "Hide Players" : "Show All Players"}</button>
       {display ? 
-        <ul className='list'>
-          {players.map(player => 
-            <div 
-              className='list-item' 
-              key={player.id} 
-              onClick={() => selectPlayer(player.id)}> 
-              {player.firstName} {player.lastName}
-            </div>)}
-        </ul> :
-        null}
+        <PlayersDisplay players={players} selectPlayer={selectPlayer} /> : null}
       {player? 
         <div>
         <h3>{player.firstName} {player.lastName}</h3>
         <h4>Rounds played: {playerRoundsCount}</h4>
-
-        <h4>Scores: {playerRounds
-          .map((score, index) =>
-            <p key={index}>{score}</p>)}
+        <h4>Scores: 
+          <ul className='list'>{playerRounds
+            .map((score, index) =>
+            <li className="list-item card widthSmall gold" key={index}>{score}</li>)}
+          </ul>
         </h4>
         
         <button onClick={toggleSubmit}>Submit a new Score</button>
 
         {submit? 
           <div>
-            {/* <input type='number' ref={playerScore}/> */}
             <input className='scoreInput' type='number' onChange={(e) => {setScore(e.target.value)}} />
             <button onClick={() => addNewScore(player.id)}>Submit
             </button>

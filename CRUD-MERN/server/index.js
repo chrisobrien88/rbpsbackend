@@ -4,7 +4,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 const cors = require('cors');
-
+const port = process.env.PORT || 5000;
 
 
 const PlayerModel = require('./models/PLAYERS').Player;
@@ -19,31 +19,9 @@ mongoose.connect(`mongodb+srv://rbps-admin:${process.env.DB_PASSWORD}@player-inf
     useNewUrlParser: true
 });
 
-// // rounds aren't being added to the player's roundsPlayed array
-// app.get('/api/newplayer', async (req, res) => {
-//     const player = new PlayerModel({
-//         id: 6,
-//         firstName: 'ed',
-//         lastName: 'cracknell',
-//         roundsPlayed: [],
-//     })
-
-//     try {
-//         await player.save();
-//         res.json(player);
-//     } catch (err) {
-//         res.status(500).send(err);
-//     }});
-
-// see all players
-// app.get('/api/players/', async (req, res) => {
-//     try {
-//         const players = await PlayerModel.find();
-//         res.json(players);
-//     } catch (err) {
-//         res.status(500).send(err);
-//     }
-// });
+app.get('/', (req, res) => {
+    res.send('try the path: /api/players');
+});
 
 app.get('/api/players/', async (req, res) => {
     PlayerModel.find({}, (err, result) => {
@@ -116,23 +94,24 @@ app.post('/api/players/:name', async (req, res) => {
     res.json(doc);
 });
 
-app.post('/api/players/:playerId/rounds', (req, res) => {
-    const round = new RoundsModel({
-        player: req.params.playerId,
-        id: req.body.id,
-        score: req.body.score,
-        date: req.body.date,
-        slopeRating: req.body.slopeRating,
-        courseRating: req.body.courseRating,
-        course: req.body.course
-    });
-    round.save().then((newRound) => {
-        res.send(newRound);
-    });
+// delete player
+app.delete('/api/players/:id', async (req, res) => {
+    const id = req.params.id;
+    const filter = { id: id };
+    const player = await PlayerModel.findOneAndDelete(filter);
+    if (!player) {
+        res.status(404).send('Player not found');
+    }
+    try {
+        res.json(player);
+    } catch (err) {
+        res.status(500).send(err);
+    }
 });
 
 
-const port = process.env.PORT || 5000;
+
+
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);
 })

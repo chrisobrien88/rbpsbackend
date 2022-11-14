@@ -17,11 +17,6 @@ const AddNewPlayer = ({firstName, lastName, setFirstName, setLastName}) => {
             <input className='nameInput' type='text' onChange={(e) => {setFirstName(e.target.value)}} />
             <input className='nameInput' type='text' onChange={(e) => {setLastName(e.target.value)}} />
             <button onClick={addPlayer}>Add</button>
-            {firstName? firstName === 'nick'?
-                <h1>F*ck off {firstName}</h1>:
-                <h1>Welcome, {firstName}, to the Royal Badger and Pit Society</h1>:
-                null
-            }
         </div>)
 }
 
