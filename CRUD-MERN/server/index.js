@@ -8,7 +8,7 @@ const port = process.env.PORT || 5000;
 
 
 const PlayerModel = require('./models/PLAYERS').Player;
-const RoundsModel = require('./models/PLAYERS').Rounds;
+const RoundModel = require('./models/PLAYERS').Rounds;
 
 
 // receive data from client in json format
@@ -77,6 +77,43 @@ app.post('/api/newplayer', (req, res) => {
     player.save().then((newPlayer) => {
         console.log('new player created');
         res.send(newPlayer);
+    });
+});
+
+app.post('/api/players/:id', async (req, res) => {
+    const id = req.body.id;
+    const filter = { id: id };
+    
+    const round = new RoundModel({
+        id: Date.now(),
+        eagles: req.body.eagles,
+        birdies: req.body.birdies,
+        pars: req.body.pars,
+        bogeys: req.body.bogeys,
+        doubleBogeys: req.body.doubleBogeys,
+        tripleBogeys: req.body.tripleBogeys,
+        blobs: req.body.blobs,
+        slopeRating: req.body.slopeRating,
+        courseRating: req.body.courseRating,
+        course: req.body.course,
+        courseStarRating: req.body.courseStarRating,
+    });
+
+    const player = await PlayerModel.findOne(filter);
+
+    const roundsPlayed = player.roundsPlayed;
+
+    const update = { roundsPlayed: [round, ...roundsPlayed] };
+
+    let doc = await PlayerModel.findOneAndUpdate(filter, update, {
+        new: true
+    });
+    // res.json(doc);
+
+    console.log('hello');
+    round.save().then((newRound) => {
+        console.log('new round added');
+        res.json(newRound);
     });
 });
 

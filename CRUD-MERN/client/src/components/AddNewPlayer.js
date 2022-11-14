@@ -17,6 +17,7 @@ const AddNewPlayer = ({firstName, lastName, setFirstName, setLastName}) => {
             <input className='nameInput' type='text' onChange={(e) => {setFirstName(e.target.value)}} />
             <input className='nameInput' type='text' onChange={(e) => {setLastName(e.target.value)}} />
             <button onClick={addPlayer}>Add</button>
+
         </div>)
 }
 

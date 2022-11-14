@@ -18,29 +18,54 @@ const PlayerSchema = new mongoose.Schema({
 ); 
 
 const RoundsSchema = new mongoose.Schema({
-    
     id: {
         type: Number,
         required: false
     },
-    score: {
+    eagles: {
         type: Number,
         required: false
     },
-    date: {
-        type: Date,
+    birdies: {
+        type: Number,
+        required: false
+    },
+    pars: {
+        type: Number,
+        required: false
+    },
+    bogeys: {
+        type: Number,
+        required: false
+    },
+    doubleBogeys: {
+        type: Number,
+        required: false
+    },
+    tripleBogeys: {
+        type: Number,
+        required: false
+    },
+    blobs: {
+        type: Number,
         required: false
     },
     slopeRating: {
-        type: String,
+        type: Number,
         required: false
     },
     courseRating: {
+        type: Number,
+        required: false
+    },
+    course: {
         type: String,
         required: false
     },
-    course: {type: String,
-        required: false}
+    courseStarRating: {
+        type: Number,
+        required: false
+    },
 });
 
 const Rounds = mongoose.model('Rounds', RoundsSchema);
