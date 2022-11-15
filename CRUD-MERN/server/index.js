@@ -82,6 +82,7 @@ app.post('/api/newplayer', (req, res) => {
 
 app.post('/api/players/:id', async (req, res) => {
     const id = req.body.id;
+    console.log(id, 'id here');
     const filter = { id: id };
     
     const round = new RoundModel({
@@ -98,38 +99,25 @@ app.post('/api/players/:id', async (req, res) => {
         course: req.body.course,
         courseStarRating: req.body.courseStarRating,
     });
-
+    console.log(round, 'round');
     const player = await PlayerModel.findOne(filter);
 
-    const roundsPlayed = player.roundsPlayed;
+    const roundsPlayed = player.roundsPlayed || [];
 
     const update = { roundsPlayed: [round, ...roundsPlayed] };
 
     let doc = await PlayerModel.findOneAndUpdate(filter, update, {
         new: true
     });
-    // res.json(doc);
-
-    console.log('hello');
-    round.save().then((newRound) => {
-        console.log('new round added');
-        res.json(newRound);
-    });
-});
-
-// post new score to player using POST
-app.post('/api/players/:name', async (req, res) => {
-    const name = req.params.name;
-    const filter = { playerName: name };
-    const score = Number(req.body.score);
-    const roundsPlayed = req.body.roundsPlayed;
-    const update = { roundsPlayed: [score, ...roundsPlayed] };
-
-    let doc = await PlayerModel.findOneAndUpdate(filter, update, {
-        new: true
-    });
     res.json(doc);
+
+    // console.log('round created??');
+    // round.save().then((newRound) => {
+    //     console.log('new round added!');
+    //     res.json(newRound);
+    // });
 });
+
 
 // delete player
 app.delete('/api/players/:id', async (req, res) => {

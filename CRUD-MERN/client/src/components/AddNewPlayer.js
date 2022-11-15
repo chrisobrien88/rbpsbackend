@@ -1,5 +1,4 @@
 import Axios from 'axios';
-import React, { useState, useRef } from 'react';
 
 const AddNewPlayer = ({firstName, lastName, setFirstName, setLastName}) => {
     
