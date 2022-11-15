@@ -4,42 +4,58 @@ import React, { useState, useEffect } from 'react';
 
 import AddNewPlayer from './components/AddNewPlayer';
 import PlayersDisplay from './components/PlayersDisplay';
+import PlayerInfo from './components/PlayerInfo';
+
 
 function App() {
 
+  //state
   const [players, setPlayers] = useState([]);
   const [player, setPlayer] = useState('');
-  const [playerRounds, setPlayerRounds] = useState([]);
-  const [playerRoundsCount, setPlayerRoundsCount] = useState([]);
-  const [score, setScore] = useState();
-
+  const [round, setRound] = useState({
+    eagleScore: 0,
+    birdieScore: 0,
+    parScore: 0,
+    bogeyScore: 0,
+    doubleBogeyScore: 0,
+    tripleBogeyScore: 0,
+    blobScore: 0,
+    slopeRating: 120,
+    courseRating: 71,
+    courseStarRating: 3,
+    course: '',
+  });
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [display, setDisplay] = useState(false);
   const [submit, setSubmit] = useState(false);
 
+  //useEffect
   useEffect(() => {
     Axios.get('http://localhost:5000/api/players').then((response) => {
         setPlayers(response.data);
       });
-  }, []);
+  }, [player]);
 
-  const addNewScore = async (id) => {
-    if(score === 0){
-      throw new Error('Please enter a valid score');
-    }
-    const newScore = await Axios.get(`http://localhost:5000/api/players/${id}/${score}`);
-    setPlayerRounds(newScore.data.roundsPlayed);
+  //functions
+  const addNewRound = (id) => {
+    Axios.post(`http://localhost:5000/api/players/${id}`, {
+      id: id,
+      eagles: round.eagleScore,
+      birdies: round.birdieScore,
+      pars: round.parScore,
+      bogeys: round.bogeyScore,
+      doubleBogeys: round.doubleBogeyScore,
+      tripleBogeys: round.tripleBogeyScore,
+      blobs: round.blobScore,
+      slopeRating: round.slopeRating,
+      courseRating: round.courseRating,
+      courseStarRating: round.courseStarRating,
+      course: round.course,
+    })
   }
 
-  useEffect(() => {
-    if (player) {
-    setPlayerRoundsCount(player.roundsPlayed.length)
-    setPlayerRounds(player.roundsPlayed);
-    }
-  }, [player, playerRoundsCount]);
-
-  const toggleDisplayPlayers = () => {
+  const toggleDisplay = () => {
     setDisplay(!display);
   };
 
@@ -57,39 +73,29 @@ function App() {
 
   return (
     <div className="App">
-      <button onClick={toggleDisplayPlayers}>{display? "Hide Players" : "Show All Players"}</button>
       {display ? 
-        <PlayersDisplay players={players} selectPlayer={selectPlayer} /> : null}
-      {player? 
         <div>
-        <h3>{player.firstName} {player.lastName}</h3>
-        <h4>Rounds played: {playerRoundsCount}</h4>
-        <h4>Scores: 
-          <ul className='list'>{playerRounds
-            .map((score, index) =>
-            <li className="list-item card widthSmall gold" key={index}>{score}</li>)}
-          </ul>
-        </h4>
-        
-        <button onClick={toggleSubmit}>Submit a new Score</button>
-
-        {submit? 
-          <div>
-            <input className='scoreInput' type='number' onChange={(e) => {setScore(e.target.value)}} />
-            <button onClick={() => addNewScore(player.id)}>Submit
-            </button>
-          </div> : null}
-        
-        </div>: 
-        "Select a player to view their stats or submit a score"
-      }
-      
-      <AddNewPlayer 
-        firstName = {firstName}
-        setFirstName = {setFirstName}
-        lastName = {lastName}
-        setLastName = {setLastName}
-      />
+          <PlayersDisplay players={players} selectPlayer={selectPlayer} /> 
+          <PlayerInfo 
+            player={player} 
+            addNewRound={addNewRound}
+            submit={submit}
+            toggleSubmit={toggleSubmit}
+            round={round}
+            setRound={setRound}
+          />
+          <AddNewPlayer 
+            firstName = {firstName}
+            setFirstName = {setFirstName}
+            lastName = {lastName}
+            setLastName = {setLastName}
+          /> 
+        </div> : 
+        <article className='enter'>
+          <h1>Welcome to the Royal Badger & Pit Society</h1>
+        <button className='button enterButton' onClick={toggleDisplay}>{!display? "Enter" : null}
+        </button>
+        </article>}
     </div>
   );
 }
