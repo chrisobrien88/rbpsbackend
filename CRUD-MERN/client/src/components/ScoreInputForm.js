@@ -36,6 +36,7 @@ const ScoreInputForm = ({
             />
           <button className="button"onClick={() => addNewRound(player.id)}>Submit
           </button>
+          {/* test push */}
         </div> : null}
         </div>
     )
