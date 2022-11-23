@@ -13,13 +13,13 @@ function App() {
   const [players, setPlayers] = useState([]);
   const [player, setPlayer] = useState('');
   const [round, setRound] = useState({
-    eagleScore: 0,
-    birdieScore: 0,
-    parScore: 0,
-    bogeyScore: 0,
-    doubleBogeyScore: 0,
-    tripleBogeyScore: 0,
-    blobScore: 0,
+    eagleScore: '',
+    birdieScore: '',
+    parScore: '',
+    bogeyScore: '',
+    doubleBogeyScore: '',
+    tripleBogeyScore: '',
+    blobScore: '',
     slopeRating: 120,
     courseRating: 71,
     courseStarRating: 3,
