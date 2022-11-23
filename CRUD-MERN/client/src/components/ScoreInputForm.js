@@ -46,8 +46,14 @@ const ScoreInputForm = ({
             <option>5</option>
           </select>
 
-          <input className='scoreInput' type='number' placeholder="Slope Rating" onChange={(e) => { setRound({ ...round, slopeRating: e.target.value }) }} />
 
+          <input className='scoreInput' type='number' placeholder="Slope Rating" onChange={(e) => { setRound({ ...round, slopeRating: e.target.value }) }} />
+          <input 
+            className='scoreInput' 
+            type='text' 
+            placeholder="Course Played" 
+            onChange={(e) => {setRound({...round, course: e.target.value})}}
+            />
 
           <h3>Score</h3>
           <p>How did you play? Input your score and make sure all your holes are acccounted for!</p>
@@ -62,6 +68,7 @@ const ScoreInputForm = ({
 
           <button className="button" onClick={() => clearRound()}>Clear</button>
           <button className="button" onClick={() => addNewRound(player.id)}>Submit</button>
+
 
         </div> : null}
     </div>
