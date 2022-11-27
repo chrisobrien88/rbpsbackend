@@ -1,6 +1,8 @@
 import './App.css';
 import Axios from 'axios';
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Route, Link } from "react-router-dom";
+
 
 import AddNewPlayer from './components/AddNewPlayer';
 import PlayersDisplay from './components/PlayersDisplay';
@@ -30,6 +32,9 @@ function App() {
   const [display, setDisplay] = useState(false);
   const [submit, setSubmit] = useState(false);
 
+  // const [triggerFetch, setTriggerFetch] = useState(false);
+
+
   //useEffect
   useEffect(() => {
     Axios.get('http://localhost:5000/api/players').then((response) => {
@@ -53,6 +58,23 @@ function App() {
       courseStarRating: round.courseStarRating,
       course: round.course,
     })
+    console.log(id);
+    console.log(round);
+    setRound({
+      eagleScore: '',
+      birdieScore: '',
+      parScore: '',
+      bogeyScore: '',
+      doubleBogeyScore: '',
+      tripleBogeyScore: '',
+      blobScore: '',
+      slopeRating: 120,
+      courseRating: 71,
+      courseStarRating: 3,
+      course: '',
+    });
+    setSubmit(!submit);
+    // triggerFetch();
   }
 
   const toggleDisplay = () => {

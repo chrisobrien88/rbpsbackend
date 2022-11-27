@@ -1,0 +1,16 @@
+.score {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: rgb(211, 165, 0);
+    border-radius: 5px;
+    padding: 0.5rem;
+    margin: 0.5rem;
+    text-align: center;
+}
+
+.cards-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}

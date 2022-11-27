@@ -46,11 +46,6 @@ body{
   /* color: white; */
 }
 
-button{
-  margin: 5px;
-  width: 200px;
-}
-
 .list {
   display: flex;
   flex-direction: row;
@@ -84,6 +79,7 @@ button{
 }
 
 .button {
+  width: 100px;
   background-color: rgb(46, 166, 88);
   color: rgb(255, 255, 255);
   border: none;
@@ -92,6 +88,12 @@ button{
   padding: 5px;
   margin: 5px;
   cursor: pointer;
+}
+
+.button-two{
+  background-color: white;
+  color: rgb(27, 106, 54);
+  border: 2px solid rgb(27, 106, 54);
 }
 
 .enter {
@@ -104,3 +106,27 @@ button{
   flex-direction: column;
 }
 
+.button:hover {
+  background-color: rgb(35, 141, 72);
+  
+}
+
+.button-two:hover{
+  background-color: rgb(27, 106, 54);
+  color: white;
+}
+
+.plus-minus{
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: rgb(69, 184, 109);
+}
+
+.minus{
+  background-color: rgb(235, 64, 61);
+}
+
+.minus:hover{
+  background-color: rgb(180, 3, 0);
+}

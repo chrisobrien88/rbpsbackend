@@ -1,5 +1,6 @@
 import React from 'react';
 import Input from './Input';
+import InputScore from './InputScore';
 
 const ScoreInputForm = ({
   addNewRound,
@@ -24,6 +25,11 @@ const ScoreInputForm = ({
       course: '',
     })
   }
+
+  // const addOne = (e, typeOfHole) => {
+  //   console.log('addOne', typeOfHole);
+  //   setRound({ ...round, typeOfHole: Number(round.typeOfHole) + 1 })
+  // }
 
   return (
     <div>
@@ -58,18 +64,32 @@ const ScoreInputForm = ({
             <p class="mb-2 text-gray-800">How did you play? Input your score and make sure all your holes are acccounted for!</p>
 
             <div class="flex flex-wrap gap-3">
-              <Input label="Eagles" placeholder="0" type="number" value={round.eagleScore} handleChange={(e) => { setRound({ ...round, eagleScore: e.target.value }) }} />
-              <Input label="Birdies" placeholder="0" type="number" value={round.birdieScore} handleChange={(e) => { setRound({ ...round, birdieScore: e.target.value }) }} />
-              <Input label="Pars" placeholder="0" type="number" value={round.parScore} handleChange={(e) => { setRound({ ...round, parScore: e.target.value }) }} />
-              <Input label="Bogeys" placeholder="0" type="number" value={round.bogeyScore} handleChange={(e) => { setRound({ ...round, bogeyScore: e.target.value }) }} />
-              <Input label="Db. Bogeys" placeholder="0" type="number" value={round.doubleBogeyScore} handleChange={(e) => { setRound({ ...round, doubleBogeyScore: e.target.value }) }} />
-              <Input label="Tr. Bogeys" placeholder="0" type="number" value={round.tripleBogeyScore} handleChange={(e) => { setRound({ ...round, tripleBogeyScore: e.target.value }) }} />
-              <Input label="Blobs" placeholder="0" type="number" value={round.blobScore} handleChange={(e) => { setRound({ ...round, blobScore: e.target.value }) }} />
+              <InputScore label="Eagles" placeholder="0" type="number" value={round.eagleScore} 
+                addOne={(e) => { setRound({ ...round, eagleScore: Number(round.eagleScore) + 1 }) }}
+                minusOne={(e) => { setRound({ ...round, eagleScore: Number(round.eagleScore) - 1 }) }} />
+              <InputScore label="Birdies" placeholder="0" type="number" value={round.birdieScore} 
+                addOne={(e) => { setRound({ ...round, birdieScore: Number(round.birdieScore) + 1 }) }}
+                minusOne={(e) => { setRound({ ...round, birdieScore: Number(round.birdieScore) - 1 }) }} />
+              <InputScore label="Pars" placeholder="0" type="number" value={round.parScore}
+                addOne={(e) => { setRound({ ...round, parScore: Number(round.parScore) + 1 }) }}
+                minusOne={(e) => { setRound({ ...round, parScore: Number(round.parScore) - 1 }) }}  />
+              <InputScore label="Bogeys" placeholder="0" type="number" value={round.bogeyScore}
+                addOne={(e) => { setRound({ ...round, bogeyScore: Number(round.bogeyScore) + 1 }) }}
+                minusOne={(e) => { setRound({ ...round, bogeyScore: Number(round.bogeyScore) - 1 }) }} />
+              <InputScore label="Db. Bogeys" placeholder="0" type="number" value={round.doubleBogeyScore} 
+                addOne={(e) => { setRound({ ...round, doubleBogeyScore: Number(round.doubleBogeyScore) + 1 }) }}
+                minusOne={(e) => { setRound({ ...round, doubleBogeyScore: Number(round.doubleBogeyScore) - 1 }) }}/>
+              <InputScore label="Tr. Bogeys" placeholder="0" type="number" value={round.tripleBogeyScore}
+                addOne={(e) => { setRound({ ...round, tripleBogeyScore: Number(round.tripleBogeyScore) + 1 }) }}
+                minusOne={(e) => { setRound({ ...round, tripleBogeyScore: Number(round.tripleBogeyScore) - 1 }) }} />
+              <InputScore label="Blobs" placeholder="0" type="number" value={round.blobScore} 
+                addOne={(e) => { setRound({ ...round, blobScore: Number(round.blobScore) + 1 }) }}
+                minusOne={(e) => { setRound({ ...round, blobScore: Number(round.blobScore) - 1 }) }} />
             </div>
           </div>
 
-          <button className="button" onClick={() => clearRound()}>Clear</button>
           <button className="button" onClick={() => addNewRound(player.id)}>Submit</button>
+          <button className="button button-two" onClick={() => clearRound()}>Clear</button>
 
 
         </div> : null
