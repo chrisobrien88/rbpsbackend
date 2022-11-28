@@ -26,6 +26,7 @@ function App() {
     courseRating: 71,
     courseStarRating: 3,
     course: '',
+    display: false
   });
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -57,6 +58,7 @@ function App() {
       courseRating: round.courseRating,
       courseStarRating: round.courseStarRating,
       course: round.course,
+      display: false,
     })
     console.log(id);
     console.log(round);
@@ -98,14 +100,14 @@ function App() {
       {display ? 
         <div>
           <PlayersDisplay players={players} selectPlayer={selectPlayer} /> 
-          <PlayerInfo 
+          {player? <PlayerInfo 
             player={player} 
             addNewRound={addNewRound}
             submit={submit}
             toggleSubmit={toggleSubmit}
             round={round}
             setRound={setRound}
-          />
+          /> : null}
           <AddNewPlayer 
             firstName = {firstName}
             setFirstName = {setFirstName}

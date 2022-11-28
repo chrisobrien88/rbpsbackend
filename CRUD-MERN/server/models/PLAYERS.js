@@ -66,6 +66,10 @@ const RoundsSchema = new mongoose.Schema({
         type: Number,
         required: false
     },
+    display: {
+        type: Boolean,
+        required: false
+    },
 });
 
 const Rounds = mongoose.model('Rounds', RoundsSchema);
