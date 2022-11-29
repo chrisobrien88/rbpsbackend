@@ -66,8 +66,8 @@ const RoundsSchema = new mongoose.Schema({
         type: Number,
         required: false
     },
-    display: {
-        type: Boolean,
+    datePlayed: {
+        type: Date,
         required: false
     },
 });

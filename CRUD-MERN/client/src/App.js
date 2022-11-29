@@ -26,7 +26,7 @@ function App() {
     courseRating: 71,
     courseStarRating: 3,
     course: '',
-    display: false
+    datePlayed: '',
   });
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -58,7 +58,7 @@ function App() {
       courseRating: round.courseRating,
       courseStarRating: round.courseStarRating,
       course: round.course,
-      display: false,
+      datePlayed: round.datePlayed,
     })
     console.log(id);
     console.log(round);
@@ -74,6 +74,7 @@ function App() {
       courseRating: 71,
       courseStarRating: 3,
       course: '',
+      datePlayed: '',
     });
     setSubmit(!submit);
     // triggerFetch();
