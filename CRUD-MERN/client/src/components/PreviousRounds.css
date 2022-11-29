@@ -17,3 +17,7 @@
     padding: 1rem;
     border-radius: 5px;
 }
+
+.red {
+    background-color: rgb(194, 7, 7);
+}

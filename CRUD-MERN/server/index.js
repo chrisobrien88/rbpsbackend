@@ -23,6 +23,7 @@ app.get('/', (req, res) => {
     res.send('try the path: /api/players');
 });
 
+// get all players
 app.get('/api/players/', async (req, res) => {
     PlayerModel.find({}, (err, result) => {
         if (err) {
@@ -33,6 +34,7 @@ app.get('/api/players/', async (req, res) => {
     });
 });
 
+// get a specific player
 app.get('/api/players/:id', async (req, res) => {
     const id = req.params.id;
     console.log(id);
@@ -45,25 +47,54 @@ app.get('/api/players/:id', async (req, res) => {
     try {
         res.json(player);
     } catch (err) {
-        res.status(500).send(err, 'no player found with that name');
+        res.status(400).send(err, 'no player found with that name');
     }
 });
 
+// get a specific player's specific round
 app.get('/api/players/:id/:score', async (req, res) => {
     const id = req.params.id;
     const filter = { id: id };
-    const score = Number(req.params.score);
+    const scoreId = Number(req.params.score);
 
     const player = await PlayerModel.findOne(filter);
-    const roundsPlayed = player.roundsPlayed;
 
-    const update = { roundsPlayed: [score, ...roundsPlayed] };
+    const score = player.roundsPlayed.find(round => round.id === scoreId);
 
-    let doc = await PlayerModel.findOneAndUpdate(filter, update, {
-        new: true
-    });
-    res.json(doc);
+    if (!score) {
+        res.status(404).send('Score not found');
+    }
+    try {
+        res.json(score);
+    }
+    catch (err) {
+        res.status(400).send(err, 'no score found with that id');
+    }
 });
+
+// delete a specific player's specific round
+app.delete('/api/players/:id/:score', async (req, res) => {
+    const id = req.params.id;
+    const filter = { id: id };
+    const scoreId = Number(req.params.score);
+
+    const player = await PlayerModel.findOne(filter);
+
+    const score = player.roundsPlayed.find(round => round.id === scoreId);
+
+    if (!score) {
+        res.status(404).send('Score not found');
+    }
+    try {
+        player.roundsPlayed = player.roundsPlayed.filter(round => round.id !== scoreId);
+        player.save();
+        res.json(score);
+    }
+    catch (err) {
+        res.status(400).send(err, 'no score found with that id');
+    }
+});
+
 
 
 // create new player
@@ -133,8 +164,6 @@ app.delete('/api/players/:id', async (req, res) => {
         res.status(500).send(err);
     }
 });
-
-
 
 
 app.listen(port, () => {

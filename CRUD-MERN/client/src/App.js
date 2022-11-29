@@ -7,6 +7,7 @@ import { BrowserRouter, Route, Link } from "react-router-dom";
 import AddNewPlayer from './components/AddNewPlayer';
 import PlayersDisplay from './components/PlayersDisplay';
 import PlayerInfo from './components/PlayerInfo';
+import Enter from './components/Enter';
 
 
 function App() {
@@ -79,8 +80,21 @@ function App() {
     // triggerFetch();
   }
 
+  // delete a specific player's specific round
+  const deleteRound = (id, scoreId) => {
+    Axios.delete(`http://localhost:5000/api/players/${id}/${scoreId}`)
+    .then((response) => {
+      console.log(response);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  }
+
+
   const toggleDisplay = () => {
     setDisplay(!display);
+    console.log('hello there');
   };
 
   const toggleSubmit = () => {
@@ -100,25 +114,24 @@ function App() {
       {display ? 
         <div>
           <PlayersDisplay players={players} selectPlayer={selectPlayer} /> 
-          {player? <PlayerInfo 
-            player={player} 
-            addNewRound={addNewRound}
-            submit={submit}
-            toggleSubmit={toggleSubmit}
-            round={round}
-            setRound={setRound}
-          /> : null}
-          <AddNewPlayer 
+          {player? 
+            <PlayerInfo 
+              player={player} 
+              addNewRound={addNewRound}
+              deleteRound={deleteRound}
+              submit={submit}
+              toggleSubmit={toggleSubmit}
+              round={round}
+              setRound={setRound}
+            /> : null}
+        </div> : 
+        <article className='enter'>
+          <Enter toggleDisplay={toggleDisplay}
             firstName = {firstName}
             setFirstName = {setFirstName}
             lastName = {lastName}
             setLastName = {setLastName}
           /> 
-        </div> : 
-        <article className='enter'>
-          <h1>Welcome to the Royal Badger & Pit Society</h1>
-        <button className='button enterButton' onClick={toggleDisplay}>{!display? "Enter" : null}
-        </button>
         </article>}
     </div>
   );

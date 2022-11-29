@@ -3,6 +3,7 @@ import PreviousRounds from './PreviousRounds';
 
 const PlayerInfo =({
     addNewRound,
+    deleteRound,
     player,
     submit,
     toggleSubmit,
@@ -21,7 +22,7 @@ const PlayerInfo =({
                 setRound={setRound}
                 round={round}
                 />
-            <PreviousRounds player={player}/>
+            <PreviousRounds player={player} deleteRound={deleteRound}/>
         </div>
     )
 }

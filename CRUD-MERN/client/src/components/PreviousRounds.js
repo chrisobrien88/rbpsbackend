@@ -1,7 +1,7 @@
 import './PreviousRounds.css';
 import React, { useState } from 'react';
 
-const PreviousRounds = ({player}) => {
+const PreviousRounds = ({player, deleteRound}) => {
 
   const [roundIds, setRoundIds] = useState([]);
 
@@ -11,13 +11,12 @@ const PreviousRounds = ({player}) => {
   };
 
   const removeRoundFromList = (clickedRoundId) => {
-    const newRounds = roundIds.filter(roundId => roundId !== clickedRoundId);
-    setRoundIds(newRounds);
-    console.log(newRounds);
+    const updatedRounds = roundIds.filter(roundId => roundId !== clickedRoundId);
+    setRoundIds(updatedRounds);
+    console.log(updatedRounds);
   };
-  
-  
- 
+
+  const oneHour = 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
 
     return (
         <section className='cards-list'>
@@ -33,6 +32,7 @@ const PreviousRounds = ({player}) => {
                     round.doubleBogeys*1
                     } </h4>
                     {roundIds.includes(round.id)?
+                    // create new componenet for this?
                       <div>
                         {round.course? <p>Course: {round.course}</p> : null}
                         {round.date? <p>Date: {round.date}</p> : null}
@@ -45,7 +45,10 @@ const PreviousRounds = ({player}) => {
                       </div> : 
                       <div>
                       <button className='button' onClick={() => addRoundtoList(round.id)}>See more</button>
-                      
+                      {Date.now() - round.id < oneHour? 
+                        <button className='button red' onClick={() => deleteRound(player.id, round.id)}>Delete Round</button>:
+                        null
+                      }
                       </div>
                     }
                     
