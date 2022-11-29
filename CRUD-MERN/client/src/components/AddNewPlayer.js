@@ -9,13 +9,29 @@ const AddNewPlayer = ({firstName, lastName, setFirstName, setLastName}) => {
         })
       }
 
+    const handleSubmit = (e) => {
+        if (firstName && lastName) {
+            addPlayer();
+            setFirstName('');
+            setLastName('');
+        }
+    }
+
+    const handleChange = (e) => {
+        if (e.target.name === 'firstName') {
+      setFirstName (e.target.value.trim().toLowerCase());
+        } else {
+      setLastName (e.target.value.trim().toLowerCase())};
+    }
+
     return(
         <div>
             <h1>sign up</h1>
-            <input required className='nameInput' type='text' onChange={(e) => {setFirstName(e.target.value.toLowerCase())}} />
-            <input required className='nameInput' type='text' onChange={(e) => {setLastName(e.target.value.toLowerCase())}} />
-            <button className='button' onClick={addPlayer}>Add User</button>
-
+            <form onSubmit={handleSubmit}>
+              <input required className='nameInput' name="firstName" type='text' onChange={handleChange} />
+              <input required className='nameInput' name="lastName" type='text' onChange={handleChange} />
+              <button className='button' type='submit'>Add User</button>
+            </form>
         </div>)
 }
 

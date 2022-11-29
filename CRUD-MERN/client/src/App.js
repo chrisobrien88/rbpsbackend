@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Route, Link } from "react-router-dom";
 
 
-import AddNewPlayer from './components/AddNewPlayer';
 import PlayersDisplay from './components/PlayersDisplay';
 import PlayerInfo from './components/PlayerInfo';
 import Enter from './components/Enter';
