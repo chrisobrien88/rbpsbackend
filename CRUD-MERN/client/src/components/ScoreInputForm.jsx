@@ -40,13 +40,7 @@ const ScoreInputForm = ({
       }
 };
 
-  const plusOne = (e) => {
-    console.log(e.target.name, 'name', e.target.value, 'value', e.target.type);
-    e.preventDefault();
-    setRound((prevState) => ({
-      ...prevState,
-      [e.target.name]: Number(1)}));
-    }
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     addNewRound(player.id);
@@ -56,9 +50,6 @@ const ScoreInputForm = ({
   return (
     <div>
       {submit ?
-
-
-
         <div class="bg-white rounded-lg p-4 max-w-xl">
           <h4>Round Info</h4>
           <p class="mb-2 text-gray-800">Where did you play?</p> 

@@ -7,14 +7,12 @@ import { BrowserRouter, Route, Link } from "react-router-dom";
 import PlayersDisplay from './components/PlayersDisplay';
 import PlayerInfo from './components/PlayerInfo';
 import Enter from './components/Enter';
+import ScoreInputForm from './components/ScoreInputForm';
 
 
 function App() {
 
-  //state
-  const [players, setPlayers] = useState([]);
-  const [player, setPlayer] = useState('');
-  const [round, setRound] = useState({
+  const initialScore = {
     eagleScore: '',
     birdieScore: '',
     parScore: '',
@@ -27,25 +25,57 @@ function App() {
     courseStarRating: 3,
     course: '',
     datePlayed: '',
-  });
+  }
+  //state
+  const [players, setPlayers] = useState([]);
+  const [player, setPlayer] = useState('');
+  const [playerRounds, setPlayerRounds] = useState([]);
+  const [round, setRound] = useState(initialScore);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [display, setDisplay] = useState(false);
   const [submit, setSubmit] = useState(false);
 
-  // const [triggerFetch, setTriggerFetch] = useState(false);
+  const [triggerFetch, setTriggerFetch] = useState(false);
 
 
   //useEffect
   useEffect(() => {
-    Axios.get('http://localhost:5000/api/players').then((response) => {
+    const getPlayers = async () => {
+      try {
+        Axios.get('http://localhost:5000/api/players').then((response) => {
         setPlayers(response.data);
       });
-  }, [player]);
+      }
+      catch (err) {
+        console.log(err);
+      }
+    }
+    getPlayers();
+  }, []);
+
+  useEffect(() => {
+    const getplayerRounds = async () => {
+      if(player) {
+      try {
+        Axios.get(`http://localhost:5000/api/players/${player.id}`).then((response) => {
+        setPlayerRounds(response.data.roundsPlayed);
+        console.log(playerRounds, 'here playerRounds');
+      });
+      }
+      catch (err) {
+        console.log(err);
+      }
+    }
+  }
+  getplayerRounds();
+  }, [triggerFetch]);
+
 
   //functions
-  const addNewRound = (id) => {
-    Axios.post(`http://localhost:5000/api/players/${id}`, {
+  const addNewRound = async (id) => {
+    try {
+      await Axios.post(`http://localhost:5000/api/players/${id}`, {
       id: id,
       eagles: round.eagleScore,
       birdies: round.birdieScore,
@@ -60,24 +90,13 @@ function App() {
       course: round.course,
       datePlayed: round.datePlayed,
     })
-    console.log(id);
-    console.log(round);
-    setRound({
-      eagleScore: '',
-      birdieScore: '',
-      parScore: '',
-      bogeyScore: '',
-      doubleBogeyScore: '',
-      tripleBogeyScore: '',
-      blobScore: '',
-      slopeRating: 120,
-      courseRating: 71,
-      courseStarRating: 3,
-      course: '',
-      datePlayed: '',
-    });
-    setSubmit(!submit);
-    // triggerFetch();
+    setRound(initialScore);
+    // setSubmit(!submit);
+    setTriggerFetch(!triggerFetch);
+    console.log(triggerFetch, 'triggerFetch')}
+    catch (e) {
+      console.log(e.message);
+    }
   }
 
   // delete a specific player's specific round
@@ -91,7 +110,6 @@ function App() {
     })
   }
 
-
   const toggleDisplay = () => {
     setDisplay(!display);
     console.log('hello there');
@@ -101,29 +119,32 @@ function App() {
     setSubmit(!submit);
   };
 
-  const selectPlayer = (id) => {
-    players.filter((player) => {
-      if (player.id === id) {
-        setPlayer(player)
-      }
-    })
-  }
-
   return (
     <div className="App">
       {display ? 
         <div>
-          <PlayersDisplay players={players} selectPlayer={selectPlayer} /> 
+          <PlayersDisplay players={players} setPlayer={setPlayer} triggerFetch={triggerFetch} setTriggerFetch={setTriggerFetch}/> 
           {player? 
-            <PlayerInfo 
-              player={player} 
-              addNewRound={addNewRound}
-              deleteRound={deleteRound}
-              submit={submit}
-              toggleSubmit={toggleSubmit}
-              round={round}
-              setRound={setRound}
-            /> : null}
+          <div>
+            <h3>{player.firstName} {player.lastName}</h3>
+            <button className="button" onClick={toggleSubmit}>Submit a new Score</button>
+              <ScoreInputForm 
+                addNewRound={addNewRound}
+                player={player}
+                submit={submit}
+                setRound={setRound}
+                round={round}
+                />
+              <PlayerInfo 
+                player={player} 
+                playerRounds={playerRounds}
+                setPlayerRounds={setPlayerRounds}
+                deleteRound={deleteRound}
+                toggleSubmit={toggleSubmit}
+                round={round}
+                setRound={setRound}
+              /> 
+            </div> : null}
         </div> : 
         <article className='enter'>
           <Enter toggleDisplay={toggleDisplay}

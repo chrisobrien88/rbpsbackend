@@ -1,5 +1,5 @@
 
-const PlayersDisplay = ({ players, selectPlayer }) => {
+const PlayersDisplay = ({ players, triggerFetch, setTriggerFetch, setPlayer }) => {
     return (
         <ul className='list'>
             {players.map(player => 
@@ -7,7 +7,7 @@ const PlayersDisplay = ({ players, selectPlayer }) => {
             <li
                 className='list-item card' 
                 key={player.id} 
-                onClick={() => selectPlayer(player.id)}> 
+                onClick={() => {setPlayer(player); setTriggerFetch(!triggerFetch)}}> 
                 {player.firstName} {player.lastName}
             </li>)}
         </ul>

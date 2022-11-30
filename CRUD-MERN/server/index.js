@@ -129,6 +129,7 @@ app.post('/api/players/:id', async (req, res) => {
         courseRating: req.body.courseRating,
         course: req.body.course,
         courseStarRating: req.body.courseStarRating,
+        datePlayed: req.body.datePlayed,
     });
     console.log(round, 'round');
     const player = await PlayerModel.findOne(filter);
@@ -142,11 +143,6 @@ app.post('/api/players/:id', async (req, res) => {
     });
     res.json(doc);
 
-    // console.log('round created??');
-    // round.save().then((newRound) => {
-    //     console.log('new round added!');
-    //     res.json(newRound);
-    // });
 });
 
 
