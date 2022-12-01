@@ -1,4 +1,5 @@
 import PreviousRounds from './PreviousRounds';
+import Stats from './Stats';
 
 const PlayerInfo =({
     deleteRound,
@@ -8,11 +9,14 @@ const PlayerInfo =({
 }) => {
 
     return (
+        <div>
+            <Stats player={player} playerRounds={playerRounds}/>
             <PreviousRounds 
                 player={player}
                 playerRounds={playerRounds}
                 setPlayerRounds={setPlayerRounds}
                 deleteRound={deleteRound}/>
+        </div>
     )
 }
 

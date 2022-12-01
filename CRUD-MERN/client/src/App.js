@@ -25,6 +25,14 @@ function App() {
     courseStarRating: 3,
     course: '',
     datePlayed: '',
+
+    grossStablefordScore: '',
+    eighteenHandicapStablefordScore: '',
+    thirtySixHandicapStablefordScore: '',
+    slopeAdjustedStablefordScore: '',
+    slopeAdjustedEighteenHandicapStablefordScore: '',
+    slopeAdjustedThirtySixHandicapStablefordScore: '',
+    courseHandicap: '',
   }
   //state
   const [players, setPlayers] = useState([]);
@@ -89,11 +97,20 @@ function App() {
       courseStarRating: round.courseStarRating,
       course: round.course,
       datePlayed: round.datePlayed,
-    })
+
+      grossStablefordScore: round.grossStablefordScore,
+      eighteenHandicapStablefordScore: round.eighteenHandicapStablefordScore,
+      thirtySixHandicapStablefordScore: round.thirtySixHandicapStablefordScore,
+      slopeAdjustedStablefordScore: round.slopeAdjustedStablefordScore, 
+      slopeAdjustedEighteenHandicapStablefordScore: round.slopeAdjustedEighteenHandicapStablefordScore,
+      slopeAdjustedThirtySixHandicapStablefordScore: round.slopeAdjustedThirtySixHandicapStablefordScore,
+      courseHandicap: round.courseHandicap,
+
+    }, {headers: { 'Content-Type': 'application/json' }});
     setRound(initialScore);
-    // setSubmit(!submit);
+    setSubmit(!submit);
     setTriggerFetch(!triggerFetch);
-    console.log(triggerFetch, 'triggerFetch')}
+}
     catch (e) {
       console.log(e.message);
     }
@@ -108,6 +125,9 @@ function App() {
     .catch((err) => {
       console.log(err);
     })
+    // is this the best way to do this? objective is to update the page after deleting a round
+    // without the slight delay, the page doesn't update until you click on a different player
+    setTimeout(() => setTriggerFetch(!triggerFetch), 500);
   }
 
   const toggleDisplay = () => {
@@ -128,6 +148,7 @@ function App() {
           <div>
             <h3>{player.firstName} {player.lastName}</h3>
             <button className="button" onClick={toggleSubmit}>Submit a new Score</button>
+            // started here.
               <ScoreInputForm 
                 addNewRound={addNewRound}
                 player={player}

@@ -104,7 +104,6 @@ app.post('/api/newplayer', (req, res) => {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
     });
-    console.log('hello');
     player.save().then((newPlayer) => {
         console.log('new player created');
         res.send(newPlayer);
@@ -130,6 +129,14 @@ app.post('/api/players/:id', async (req, res) => {
         course: req.body.course,
         courseStarRating: req.body.courseStarRating,
         datePlayed: req.body.datePlayed,
+
+        grossStablefordScore: req.body.grossStablefordScore,
+        eighteenHandicapStablefordScore: req.body.eighteenHandicapStablefordScore,
+        thirtySixHandicapStablefordScore: req.body.thirtySixHandicapStablefordScore,
+        slopeAdjustedStablefordScore: req.body.slopeAdjustedStablefordScore, 
+        slopeAdjustedEighteenHandicapStablefordScore: req.body.slopeAdjustedEighteenHandicapStablefordScore,
+        slopeAdjustedThirtySixHandicapStablefordScore: req.body.slopeAdjustedThirtySixHandicapStablefordScore,
+        courseHandicap: req.body.courseHandicap,
     });
     console.log(round, 'round');
     const player = await PlayerModel.findOne(filter);

@@ -70,6 +70,36 @@ const RoundsSchema = new mongoose.Schema({
         type: Date,
         required: false
     },
+
+    grossStablefordScore: {
+        type: Number,
+        required: false
+    },
+    eighteenHandicapStablefordScore: {
+        type: Number,
+        required: false
+    },
+    thirtySixHandicapStablefordScore: {
+        type: Number,
+        required: false
+    },
+    slopeAdjustedStablefordScore: {
+        type: Number,
+        required: false
+    },
+    slopeAdjustedEighteenHandicapStablefordScore: {
+        type: Number,
+        required: false
+    },
+    slopeAdjustedThirtySixHandicapStablefordScore: {
+        type: Number,
+        required: false
+    },
+    courseHandicap: {
+        type: Number,
+        required: false
+    },
+
 });
 
 const Rounds = mongoose.model('Rounds', RoundsSchema);

@@ -1,6 +1,8 @@
 import React from 'react';
 import Input from './Input';
 import InputScore from './InputScore';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 const ScoreInputForm = ({
   addNewRound,
@@ -10,24 +12,18 @@ const ScoreInputForm = ({
   round
 }) => {
 
-  const clearRound = () => {
-    setRound({
-      eagleScore: 0,
-      birdieScore: 0,
-      parScore: 0,
-      bogeyScore: 0,
-      doubleBogeyScore: 0,
-      tripleBogeyScore: 0,
-      blobScore: 0,
-      slopeRating: 120,
-      courseRating: 71,
-      courseStarRating: 3,
-      course: '',
-      datePlayed: ''
-    })
-  }
+  const [readyToSubmit, setReadyToSubmit] = useState(false);
+  const [holesCount, setHolesCount] = useState(0);
+  const [roundScore, setRoundScore] = useState(0);
+
+  // import initial state from parent component to clearround() function
+
 
   const handleChange = (e) => {
+    
+    if(e.target.type === 'checkbox') {
+      setReadyToSubmit(e.target.checked);}
+
     if (e.target.type === 'number') {
       setRound((prevState) => ({
         ...prevState,
@@ -36,16 +32,68 @@ const ScoreInputForm = ({
       setRound((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value}))
-    
       }
-};
 
-  
+      setRound((prevState) => ({
+        ...prevState,
+        grossStablefordScore: roundScore.grossStablefordScore,
+        eighteenHandicapStablefordScore: roundScore.eighteenHandicapStablefordScore,
+        thirtySixHandicapStablefordScore: roundScore.thirtySixHandicapStablefordScore,
+      }));  
+    };
+
+  useEffect(() => {
+    setHolesCount(
+      Number(round.eagleScore) + 
+      Number(round.birdieScore) + 
+      Number(round.parScore) + 
+      Number(round.bogeyScore) + 
+      Number(round.doubleBogeyScore) + 
+      Number(round.tripleBogeyScore) +
+      Number(round.blobScore)
+      );
+
+    setRoundScore({
+      grossStablefordScore:   
+        Number(round.eagleScore) * 4 +
+        Number(round.birdieScore) * 3 +
+        Number(round.parScore) * 2 +
+        Number(round.bogeyScore) * 1
+    });
+    
+    setRoundScore((prevState) => ({
+      ...prevState,
+      eighteenHandicapStablefordScore:
+        Number(round.eagleScore) * 5 +
+        Number(round.birdieScore) * 4 +
+        Number(round.parScore) * 3 +
+        Number(round.bogeyScore) * 2 +
+        Number(round.doubleBogeyScore) * 1
+      }));
+    
+    setRoundScore((prevState) => ({
+      ...prevState,
+      thirtySixHandicapStablefordScore:
+        Number(round.eagleScore) * 6 +
+        Number(round.birdieScore) * 5 +
+        Number(round.parScore) * 4 +
+        Number(round.bogeyScore) * 3 +
+        Number(round.doubleBogeyScore) * 2 +
+        Number(round.tripleBogeyScore) * 1
+      }));
+        
+  }, [round])
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    addNewRound(player.id);
+    if (holesCount !== 18) {
+      // chagne this to a modal
+      alert('You must enter a score for all 18 holes');
+    } else {
+      addNewRound(player.id);
+      setReadyToSubmit(false);
+    }
   }
-
 
   return (
     <div>
@@ -84,6 +132,8 @@ const ScoreInputForm = ({
                   type="number" 
                   name="slopeRating" 
                   handleChange={handleChange} />
+                Your Course Handicap: take handicap from player e.g. player.handicap * slopeRating / 113 + course rating - par
+
                   <select
                     value={round.courseStarRating}
                     label="Course Star Rating"
@@ -145,11 +195,33 @@ const ScoreInputForm = ({
                   type="number" 
                   name="tripleBogeyScore" 
                   handleChange={handleChange}/>
+                  <InputScore
+                  value={round.blobs}
+                  label="Blobs" 
+                  placeholder="0"
+                  type="number" 
+                  name="blobScore" 
+                  handleChange={handleChange}/>
                 </div>
+                <p>number of holes inputted: {holesCount}</p>
+                <p> Scratch Score: {roundScore.grossStablefordScore} </p>
+                <p> 18 handicap Score: {roundScore.eighteenHandicapStablefordScore} </p>
               </div>
             </div>
-            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">Submit</button>
-            <button className="button button-two" onClick={() => clearRound()}>Clear</button>
+            {holesCount === 18 ? <label>
+              <input  type="checkbox" name='checkbox' checked={readyToSubmit} onChange={handleChange} /> Ready to submit?
+            </label> : null}
+            
+            {readyToSubmit ? 
+              <button 
+                class=" button bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" 
+                type="submit">Submit
+              </button>  : 
+              <button 
+                class=" button grey " 
+                type="submit" disabled>Submit
+              </button>}
+              
           </form>
         </div> : null
       }

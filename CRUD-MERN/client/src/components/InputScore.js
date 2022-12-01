@@ -1,7 +1,6 @@
 import React from 'react';
 
-const InputScore = ({label, value, placeholder, type, plusOne, name, handleChange}) => {
-
+const InputScore = ({label, value, placeholder, type, name, handleChange}) => {
 
     return (
         <div class="flex flex-col mt-1 w-32">
