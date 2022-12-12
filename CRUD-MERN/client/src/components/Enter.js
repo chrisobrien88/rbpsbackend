@@ -4,7 +4,7 @@ const Enter = ({ toggleDisplay, firstName, lastName, setFirstName, setLastName }
     return (
         <div>
         <section>
-            <h1>Welcome to the Royal Badger & Pit Society</h1>
+            <h1>Welcome! </h1>
             <button className='button enterButton' onClick={toggleDisplay}>
               Enter
             </button>

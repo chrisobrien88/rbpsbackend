@@ -19,7 +19,7 @@ const PreviousRounds = ({player, deleteRound, playerRounds, setPlayerRounds}) =>
     return (
         <section className='cards-list'>
             {playerRounds.map((round, index, array) => 
-              <article onClick={() => console.log(round, round.id, player.id, 'hellosies')} className='card' key={round.id}>
+              <article onClick={() => console.log(round, round.id, player.id, 'round info')} className='card' key={round.id}>
                 <p>Round {index + 1} of {array.length}: </p> 
                 <h4 className='score'>{
                   round.eighteenHandicapStablefordScore

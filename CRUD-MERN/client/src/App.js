@@ -68,7 +68,6 @@ function App() {
       try {
         Axios.get(`http://localhost:5000/api/players/${player.id}`).then((response) => {
         setPlayerRounds(response.data.roundsPlayed);
-        console.log(playerRounds, 'here playerRounds');
       });
       }
       catch (err) {
@@ -132,7 +131,6 @@ function App() {
 
   const toggleDisplay = () => {
     setDisplay(!display);
-    console.log('hello there');
   };
 
   const toggleSubmit = () => {
@@ -148,7 +146,6 @@ function App() {
           <div>
             <h3>{player.firstName} {player.lastName}</h3>
             <button className="button" onClick={toggleSubmit}>Submit a new Score</button>
-            // started here.
               <ScoreInputForm 
                 addNewRound={addNewRound}
                 player={player}

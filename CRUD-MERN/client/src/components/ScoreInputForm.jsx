@@ -98,7 +98,7 @@ const ScoreInputForm = ({
   return (
     <div>
       {submit ?
-        <div class="bg-white rounded-lg p-4 max-w-xl">
+        <div class="tempclass bg-white rounded-lg p-4 max-w-xl">
           <h4>Round Info</h4>
           <p class="mb-2 text-gray-800">Where did you play?</p> 
           <form onSubmit={handleSubmit}>

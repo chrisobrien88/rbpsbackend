@@ -37,7 +37,6 @@ app.get('/api/players/', async (req, res) => {
 // get a specific player
 app.get('/api/players/:id', async (req, res) => {
     const id = req.params.id;
-    console.log(id);
     const filter = { id: id };
     const player = await PlayerModel.findOne(filter);
     // re-do error handling
@@ -112,7 +111,6 @@ app.post('/api/newplayer', (req, res) => {
 
 app.post('/api/players/:id', async (req, res) => {
     const id = req.body.id;
-    console.log(id, 'id here');
     const filter = { id: id };
     
     const round = new RoundModel({
@@ -138,7 +136,6 @@ app.post('/api/players/:id', async (req, res) => {
         slopeAdjustedThirtySixHandicapStablefordScore: req.body.slopeAdjustedThirtySixHandicapStablefordScore,
         courseHandicap: req.body.courseHandicap,
     });
-    console.log(round, 'round');
     const player = await PlayerModel.findOne(filter);
 
     const roundsPlayed = player.roundsPlayed || [];

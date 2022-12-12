@@ -145,3 +145,7 @@ body{
   background-color: rgb(157, 150, 150);
   color: grey;
 }
+
+.tempclass{
+  background-color: rgb(255, 255, 255);
+}
