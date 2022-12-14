@@ -1,3 +1,5 @@
+This app is a practice project with a purpose (for a select few friends who enjoy playing golf).
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
