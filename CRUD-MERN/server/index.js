@@ -34,15 +34,16 @@ app.get('/api/players/', async (req, res) => {
     });
 });
 
-// get a specific player
-app.get('/api/players/:id', async (req, res) => {
-    const id = req.params.id;
-    const filter = { id: id };
+
+
+app.get('/api/players/:userName', async (req, res) => {
+    const id = req.params.userName;
+    const filter = { userName: id };
     const player = await PlayerModel.findOne(filter);
     // re-do error handling
-    if (!player) {
-        res.status(404).send('Player not found');
-    }
+    // if (!player) {
+    //     res.status(404).send('Player not found');
+    // }
     try {
         res.json(player);
     } catch (err) {
@@ -100,6 +101,7 @@ app.delete('/api/players/:id/:score', async (req, res) => {
 app.post('/api/newplayer', (req, res) => {
     const player = new PlayerModel({
         id: Date.now(),
+        email: req.body.email,
         firstName: req.body.firstName,
         lastName: req.body.lastName,
     });
@@ -109,9 +111,50 @@ app.post('/api/newplayer', (req, res) => {
     });
 });
 
-app.post('/api/players/:id', async (req, res) => {
-    const id = req.body.id;
-    const filter = { id: id };
+// create new round
+// app.post('/api/players/:id', async (req, res) => {
+//     const id = req.body.id;
+//     const filter = { id: id };
+    
+//     const round = new RoundModel({
+//         id: Date.now(),
+//         eagles: req.body.eagles,
+//         birdies: req.body.birdies,
+//         pars: req.body.pars,
+//         bogeys: req.body.bogeys,
+//         doubleBogeys: req.body.doubleBogeys,
+//         tripleBogeys: req.body.tripleBogeys,
+//         blobs: req.body.blobs,
+//         slopeRating: req.body.slopeRating,
+//         courseRating: req.body.courseRating,
+//         course: req.body.course,
+//         courseStarRating: req.body.courseStarRating,
+//         datePlayed: req.body.datePlayed,
+
+//         grossStablefordScore: req.body.grossStablefordScore,
+//         eighteenHandicapStablefordScore: req.body.eighteenHandicapStablefordScore,
+//         thirtySixHandicapStablefordScore: req.body.thirtySixHandicapStablefordScore,
+//         slopeAdjustedStablefordScore: req.body.slopeAdjustedStablefordScore, 
+//         slopeAdjustedEighteenHandicapStablefordScore: req.body.slopeAdjustedEighteenHandicapStablefordScore,
+//         slopeAdjustedThirtySixHandicapStablefordScore: req.body.slopeAdjustedThirtySixHandicapStablefordScore,
+//         courseHandicap: req.body.courseHandicap,
+//     });
+//     const player = await PlayerModel.findOne(filter);
+
+//     const roundsPlayed = player.roundsPlayed || [];
+
+//     const update = { roundsPlayed: [round, ...roundsPlayed] };
+
+//     let doc = await PlayerModel.findOneAndUpdate(filter, update, {
+//         new: true
+//     });
+//     res.json(doc);
+
+// });
+
+app.post('/api/players/:userName', async (req, res) => {
+    const id = req.body.userName;
+    const filter = { userName: id };
     
     const round = new RoundModel({
         id: Date.now(),
@@ -122,6 +165,7 @@ app.post('/api/players/:id', async (req, res) => {
         doubleBogeys: req.body.doubleBogeys,
         tripleBogeys: req.body.tripleBogeys,
         blobs: req.body.blobs,
+
         slopeRating: req.body.slopeRating,
         courseRating: req.body.courseRating,
         course: req.body.course,

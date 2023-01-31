@@ -5,6 +5,14 @@ const PlayerSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    email: {
+        type: String,
+        required: true
+    },
+    userName: {
+        type: String,
+        required: true
+    },
     firstName: {
         type: String,
         required: true,
@@ -19,6 +27,10 @@ const PlayerSchema = new mongoose.Schema({
 
 const RoundsSchema = new mongoose.Schema({
     id: {
+        type: Number,
+        required: false
+    },
+    handicapIndex: {
         type: Number,
         required: false
     },
