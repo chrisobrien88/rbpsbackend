@@ -21,6 +21,11 @@ const PlayerSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    handicapIndex: {
+        type: Number,
+        required: false
+    },
+    
     roundsPlayed: [],
   },
 ); 
@@ -31,6 +36,10 @@ const RoundsSchema = new mongoose.Schema({
         required: false
     },
     handicapIndex: {
+        type: Number,
+        required: false
+    },
+    courseHandicap: {
         type: Number,
         required: false
     },
@@ -104,10 +113,6 @@ const RoundsSchema = new mongoose.Schema({
         required: false
     },
     slopeAdjustedThirtySixHandicapStablefordScore: {
-        type: Number,
-        required: false
-    },
-    courseHandicap: {
         type: Number,
         required: false
     },

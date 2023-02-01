@@ -34,8 +34,7 @@ app.get('/api/players/', async (req, res) => {
     });
 });
 
-
-
+// get a specific player
 app.get('/api/players/:userName', async (req, res) => {
     const id = req.params.userName;
     const filter = { userName: id };
@@ -50,6 +49,66 @@ app.get('/api/players/:userName', async (req, res) => {
         res.status(400).send(err, 'no player found with that name');
     }
 });
+
+app.get('/api/players/:userName/best-rounds', async (req, res) => {
+    const id = req.params.userName;
+    const filter = { userName: id };
+    const player = await PlayerModel.findOne(filter);
+    
+    const mostRecentPlayerRounds = player.roundsPlayed.slice(0,20)
+    const eligibleRounds = Math.round(mostRecentPlayerRounds.length * 0.4);
+    const bestScores = mostRecentPlayerRounds.map(round => round.slopeAdjustedThirtySixHandicapStablefordScore).sort((a, b) => b - a).slice(0, eligibleRounds);
+    const totalBestScores = bestScores.reduce((a, b) => a + b, 0);
+    const averageBestScores = totalBestScores / bestScores.length;
+    const handicapIndex = Number(((72 - averageBestScores) * 0.88).toFixed(2));
+    try {
+        res.json({
+            scoresArr: bestScores,
+            handicapIndex: handicapIndex
+            });
+    } catch (err) {
+        res.status(400).send(err, 'no player found with that name');
+    }
+});
+
+// calculate handicap index
+//     app.get('/api/players/:userName/handicap-index', async (req, res) => {
+//     const id = req.params.userName;
+//     const filter = { userName: id };
+//     const player = await PlayerModel.findOne(filter);
+    
+//     const mostRecentPlayerRounds = player.roundsPlayed.slice(0,20)
+//     const eligibleRounds = Math.round(mostRecentPlayerRounds.length * 0.4);
+    
+//     const stablefordScoreThirtySixHandicap = mostRecentPlayerRounds.map(round => round.thirtySixHandicapStablefordScore);
+//     const bestScores = stablefordScoreThirtySixHandicap.sort((a, b) => b - a).slice(0, eligibleRounds);
+//     const totalBestScores = bestScores.reduce((a, b) => a + b, 0);
+//     const averageBestScores = totalBestScores / bestScores.length;
+//     const handicapIndex = Number(((72 - averageBestScores) * 0.88).toFixed(2));
+
+//     try {
+//         res.json(handicapIndex);
+//     } catch (err) {
+//         res.status(400).send(err, 'scores not found');
+//     }
+// });
+
+// // calculate best 3 rounds scores
+// app.get('/api/players/:userName/best-three-rounds', async (req, res) => {
+//     const id = req.params.userName;
+//     const filter = { userName: id };
+//     const player = await PlayerModel.findOne(filter);
+
+//     const mostRecentPlayerRounds = player.roundsPlayed.slice(0,20)
+//     const bestScores = mostRecentPlayerRounds.map(round => round.eighteenHandicapStablefordScore).sort((a, b) => b - a).slice(0, 3);
+//     const totalBestScores = bestScores.reduce((a, b) => a + b, 0);
+
+//     try {
+//         res.json(totalBestScores);
+//     } catch (err) {
+//         res.status(400).send(err, 'scores not found');
+//     }
+// });
 
 // get a specific player's specific round
 app.get('/api/players/:id/:score', async (req, res) => {
@@ -104,12 +163,35 @@ app.post('/api/newplayer', (req, res) => {
         email: req.body.email,
         firstName: req.body.firstName,
         lastName: req.body.lastName,
+        userName: req.body.userName,
     });
     player.save().then((newPlayer) => {
         console.log('new player created');
         res.send(newPlayer);
     });
 });
+
+// update player
+app.put('/api/players/:username/update-handicap-index', async (req, res) => {
+    console.log('update player route hit')
+    const id = req.params.username;
+    const filter = { userName: id };
+    const player = await PlayerModel.findOne(filter);
+
+    if (!player) {
+        res.status(404).send('Player not found');
+    }
+    try {
+        player.handicapIndex = req.body.handicapIndex;
+        player.save();
+        res.json(player);
+    }
+    catch (err) {
+        res.status(400).send(err, 'no player found with that name');
+    }
+});
+
+
 
 // create new round
 // app.post('/api/players/:id', async (req, res) => {
@@ -152,12 +234,19 @@ app.post('/api/newplayer', (req, res) => {
 
 // });
 
-app.post('/api/players/:userName', async (req, res) => {
+// create new round
+app.post('/api/players/:userName/submit-new-round', async (req, res) => {
+    console.log('atttempt to create new round');
+    
     const id = req.body.userName;
     const filter = { userName: id };
     
     const round = new RoundModel({
         id: Date.now(),
+
+        courseHandicap: req.body.courseHandicap,
+        handicapIndex: req.body.handicapIndex,
+
         eagles: req.body.eagles,
         birdies: req.body.birdies,
         pars: req.body.pars,
@@ -178,13 +267,15 @@ app.post('/api/players/:userName', async (req, res) => {
         slopeAdjustedStablefordScore: req.body.slopeAdjustedStablefordScore, 
         slopeAdjustedEighteenHandicapStablefordScore: req.body.slopeAdjustedEighteenHandicapStablefordScore,
         slopeAdjustedThirtySixHandicapStablefordScore: req.body.slopeAdjustedThirtySixHandicapStablefordScore,
-        courseHandicap: req.body.courseHandicap,
     });
-    const player = await PlayerModel.findOne(filter);
 
+    const player = await PlayerModel.findOne(filter);
     const roundsPlayed = player.roundsPlayed || [];
 
     const update = { roundsPlayed: [round, ...roundsPlayed] };
+    player.handicapIndex = req.body.handicapIndex;
+    player.save();
+    
 
     let doc = await PlayerModel.findOneAndUpdate(filter, update, {
         new: true
