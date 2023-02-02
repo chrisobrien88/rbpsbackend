@@ -25,8 +25,12 @@ const PlayerSchema = new mongoose.Schema({
         type: Number,
         required: false
     },
-    
     roundsPlayed: [],
+    bestRounds: [],
+    totalScore: {
+        type: Number,
+        required: false
+    },
   },
 ); 
 
